@@ -1,15 +1,15 @@
 /**
  * Created by Tomer on 12-Nov-16.
  */
-angular.module('panda.services.registration', [])
-    .service('registrationService', function ($http) {
+angular.module('panda.services.registration', ['panda.constants'])
+    .service('registrationService', function ($http, config) {
 
         var self = this;
-        var rootUrl = 'http://10.0.0.10:3000';
+        self.currentUserInfo = undefined;
 
         self.sendRegistration = function (name, city, parkingRegion, email, username, password) {
 
-            return $http.post(rootUrl + '/register', {
+            return $http.post(config.rootUrl + '/register', {
                 params: {
                     name: name,
                     city: city,
@@ -19,5 +19,16 @@ angular.module('panda.services.registration', [])
                     password: password
                 }
             });
+        };
+
+        self.setUser = function (name, city, parkingRegion, email, username, password) {
+            self.currentUserInfo = {
+                name: name,
+                city: city,
+                parkingRegion: parkingRegion,
+                email: email,
+                username: username,
+                password: password
+            };
         };
     });

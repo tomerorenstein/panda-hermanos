@@ -6,7 +6,7 @@ angular.module( 'panda', [
 ])
 
 .config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {
-  $urlRouterProvider.otherwise( '/' );
+  $urlRouterProvider.otherwise( '/registration' );
 })
 
 .run( function run () {

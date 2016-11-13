@@ -4,8 +4,9 @@
 
 angular.module( 'panda.registration', [
     'ui.router',
-    'plusOne',
-    'panda.services.registration'
+    'panda.services.registration',
+    'panda.constants',
+    'panda.home'
 ])
 
 /**
@@ -15,7 +16,7 @@ angular.module( 'panda.registration', [
  */
     .config(function config( $stateProvider ) {
         $stateProvider.state( 'registration', {
-            url: '/',
+            url: '/registration',
             views: {
                 "main": {
                     controller: 'RegCtrl',
@@ -29,9 +30,9 @@ angular.module( 'panda.registration', [
     /**
      * And of course we define a controller for our route.
      */
-    .controller( 'RegCtrl', function HomeController( $location, $scope, registrationService, $http ) {
+    .controller( 'RegCtrl', function HomeController( $state, $scope, registrationService, config, $location ) {
 
-        $scope.company = "PANDAS HERMANOS";
+        $scope.company = config.company;
         $scope.name = "";
         $scope.city = "";
         $scope.parkingRegion = "";
@@ -44,11 +45,20 @@ angular.module( 'panda.registration', [
             registrationService.sendRegistration($scope.name, $scope.city, $scope.parkingRegion,
                                                  $scope.email, $scope.username, $scope.password)
                 .success(function () {
-                    $location.path('/someNewPath');
+                    registrationService.setUser($scope.name, $scope.city, $scope.parkingRegion,
+                                                $scope.email, $scope.username, $scope.password);
+
+                    //  $location.path('/home');
                 }).error(function (err) {
-                    if (err !== undefined && err.code == 310) {
-                        $scope.error = "User already exists";
-                    }
+                    // if (err !== undefined && err.code == 310) {
+                    //     $scope.error = "User already exists";
+                    // }
+
+                    registrationService.setUser($scope.name, $scope.city, $scope.parkingRegion,
+                        $scope.email, $scope.username, $scope.password);
+
+                    //window.location = '/home';
+                    $location.path('/home');
             });
         };
     })
