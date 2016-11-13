@@ -29,7 +29,7 @@ angular.module( 'panda.registration', [
     /**
      * And of course we define a controller for our route.
      */
-    .controller( 'RegCtrl', function HomeController( $scope, registrationService, $http ) {
+    .controller( 'RegCtrl', function HomeController( $location, $scope, registrationService, $http ) {
 
         $scope.company = "PANDAS HERMANOS";
         $scope.name = "";
@@ -38,14 +38,17 @@ angular.module( 'panda.registration', [
         $scope.email = "";
         $scope.username = "";
         $scope.password = "";
+        $scope.error = "1";
 
-        $scope.send = function () {
+            $scope.send = function () {
             registrationService.sendRegistration($scope.name, $scope.city, $scope.parkingRegion,
                                                  $scope.email, $scope.username, $scope.password)
-                .success(function (data) {
-                    console.log(4321);
+                .success(function () {
+                    $location.path('/someNewPath');
                 }).error(function (err) {
-                console.log(1234);
+                    if (err !== undefined && err.code == 310) {
+                        $scope.error = "User already exists";
+                    }
             });
         };
     })
